@@ -1,3 +1,4 @@
+// SetHistoryAdapter.kt
 package tw.edu.ncku.iim.rsliu.setcard
 
 import android.view.LayoutInflater
@@ -5,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import tw.edu.ncku.iim.rsliu.setcard.R
 
-class SetHistoryAdapter(private val sets: List<List<SetCard>>) :
-    RecyclerView.Adapter<SetHistoryAdapter.ViewHolder>() {
+class SetHistoryAdapter(private var data: List<List<SetCard>>) : RecyclerView.Adapter<SetHistoryAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.setTextView)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.TextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,9 +20,16 @@ class SetHistoryAdapter(private val sets: List<List<SetCard>>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val set = sets[position]
-        holder.textView.text = set.joinToString(", ") { it.toString() }
+        val set = data[position]
+        holder.textView.text = set.joinToString(separator = ", ") { card ->
+            "${card.number} ${card.color} ${card.shape} ${card.shading}"
+        }
     }
 
-    override fun getItemCount(): Int = sets.size
+    override fun getItemCount(): Int = data.size
+
+    fun updateData(newData: List<List<SetCard>>) {
+        data = newData
+        notifyDataSetChanged()
+    }
 }

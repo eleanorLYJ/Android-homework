@@ -1,3 +1,4 @@
+// HistoryFragment.kt
 package tw.edu.ncku.iim.rsliu.setcard
 
 import android.os.Bundle
@@ -8,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import tw.edu.ncku.iim.rsliu.setcard.R
 
 class HistoryFragment : Fragment() {
 
@@ -23,8 +23,12 @@ class HistoryFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = SetHistoryAdapter(viewModel.foundSets)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = SetHistoryAdapter(viewModel.foundSets.value ?: mutableListOf())
+
+        viewModel.foundSets.observe(viewLifecycleOwner) { sets ->
+            (recyclerView.adapter as SetHistoryAdapter).updateData(sets)
+        }
 
         return view
     }
